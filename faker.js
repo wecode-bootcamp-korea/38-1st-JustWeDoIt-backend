@@ -29,24 +29,9 @@ function createRandomProduct() {
   return {
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
-    // category_id: 
-    // special_id:
-    // gender_id :
-    // thumbnail_image_url :
-    price : faker.commerce.price(10000, 100000, 0, '₩')
+    price : faker.commerce.price(10000, 100000, 0)
   }
 }
-
-// let userArray = [];
-// let productArray = [];
-
-// for (let i = 0; i < 2; i++) {
-//   userArray[i] = createRandomUser();
-// }
-
-// for (let i = 0; i < 2; i++) {
-//   productArray[i] = createRandomProduct();
-// }
 
 const postMockUserData = async (name, email, password, phone_number, address, resident_number_front, resident_number_back, point) => {
   return await database.query(`
@@ -79,8 +64,8 @@ const makeMockData = async() => {
   await database.initialize()
 
   for (let i = 0; i < 100; i++) {
-    const user = createRandomUser()
-    console.log(user)
+    const user = createRandomUser();
+    const product = createRandomProduct();
 
     postMockUserData(
       user.name,
@@ -93,11 +78,11 @@ const makeMockData = async() => {
       user.point,
       )
     
-    // postMockProductData(
-    //   createRandomProduct.name, 
-    //   createRandomProduct.description,
-    //   createRandomProduct.price
-    // )
+    postMockProductData(
+      product.name, 
+      product.description,
+      product.price
+    )
   }
 }
 

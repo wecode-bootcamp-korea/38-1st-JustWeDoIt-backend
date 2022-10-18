@@ -7,7 +7,7 @@ CREATE TABLE users (
         phone_number VARCHAR(50) NULL,
         address VARCHAR(200) NULL,
         resident_number_front INT NULL,
-        residetn_number_back INT NULL,
+        resident_number_back INT NULL,
         point DECIMAL NULL,
         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
