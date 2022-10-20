@@ -1,6 +1,9 @@
 const {database} = require('./dataSource');
 
-const requestMain = async () => {
+const requestMain = async (offset,limit) => {
+
+    const numberOffset = +offset;
+    const numberLimit = +limit;
     const main = await database.query(
         `
             SELECT 
@@ -15,7 +18,8 @@ const requestMain = async () => {
             JOIN categories c ON products.category_id=c.id
             JOIN special s ON products.special_id=s.id
             JOIN gender g ON products.gender_id=g.id
-            WHERE products.id LIMIT 0,10 `
+            WHERE products.id LIMIT ?,? `
+            ,[numberOffset,numberLimit]
     )
 
     return main;

@@ -1,3 +1,5 @@
 const mainController = require('./mainController');
+const moveProductController = require('./moveProductController');
 
-module.exports = { mainController };
+
+module.exports = { mainController, moveProductController};

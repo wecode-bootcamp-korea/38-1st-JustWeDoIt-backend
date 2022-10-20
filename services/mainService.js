@@ -1,7 +1,7 @@
 const { mainDao } = require('../models');
 
-const requestMain = async () => {
-    const main = await mainDao.requestMain();
+const requestMain = async (offset,limit) => {
+    const main = await mainDao.requestMain(offset,limit);
 
     return main;
 }
