@@ -53,6 +53,7 @@ const signIn = async (email, password) => {
   return jwt.sign({ sub: 'Access Token', aud: user.name, email: user.email }, process.env.JWT_SECRET);
 };
 
+
 module.exports = {
   signUp,
   signIn,
