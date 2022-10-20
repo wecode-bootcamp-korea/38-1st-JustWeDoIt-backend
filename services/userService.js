@@ -12,7 +12,7 @@ const hashPassword = async(plaintextPassword) => {
 }
 
 const getUserById = async (id) => {
-	return await userDao.getUserById(id)
+	      return await userDao.getUserById(id)
 }
 
 const signUp = async (name, email, residentNumberFront, residentNumberback, password) => {
