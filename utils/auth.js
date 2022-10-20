@@ -4,10 +4,10 @@ const { getUserById } = require('../services/userService');
 
 const loginRequired = async (req, res, next) => {
 
-  // 1) Getting token and check if it is there
-  const accessToken = req.headers.authorization;
+  // 1) Getting  and check if it is there
+  const accesstoken = req.headers.authorization;
 
-  if (!accessToken) {
+  if (!accesstoken) {
     const error = new Error('NEED_ACCESS_TOKEN');
     error.statusCode = 401;
 
@@ -15,7 +15,7 @@ const loginRequired = async (req, res, next) => {
   }
 
   // 2) Verification token
-  const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRET);
+  const decoded = await promisify(jwt.verify)(accesstoken, process.env.JWT_SECRET);
 
   // 3) Check if user still exists
   const user = await getUserById(decoded.id);
