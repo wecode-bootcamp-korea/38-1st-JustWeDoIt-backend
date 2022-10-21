@@ -3,7 +3,7 @@ const orderController  = require('../controllers');
 
 const router = express.Router();
 
-router.get('/CartIterm',  loginRequired, orderController.CartIterm);
+router.get('/orderInfo',  loginRequired, orderController.orderInfo);
 
 
 module.exports = router;
