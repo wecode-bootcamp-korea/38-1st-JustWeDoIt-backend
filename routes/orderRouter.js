@@ -3,7 +3,6 @@ const orderController  = require('../controllers');
 
 const router = express.Router();
 
-router.get('/orderInfo',  loginRequired, orderController.orderInfo);
-
-
+router.get('', loginRequired, orderController.orderInfo);
+//router.post('/info',  loginRequired, orderController.orderInfo); post, get 인지 고민
 module.exports = router;
