@@ -57,6 +57,18 @@ const getCartByUserId = async (userId) => {
 }
 
 const getStockByUserId = async (userId) => {
+  const stockIdInUserCart = await database.query(`
+    SELECT c.stock_id
+    FROM carts c
+    WHERE user_id = ?;`, [ userId ]
+  );
+
+  const productIdInUserCart = await database.query(`
+    SELECT s.product_id
+    FROM stock s
+    WHERE id = ${stockIdInUserCart}`
+  );
+  
   return await database.query(`
     SELECT
       s.product_id AS productId,
@@ -66,15 +78,7 @@ const getStockByUserId = async (userId) => {
       s.stock AS stockQuantity
     FROM stock s
     JOIN products p ON s.product_id = p.id
-    WHERE s.product_id = (
-      SELECT s.product_id
-      FROM stock s
-      WHERE s.id = (
-        SELECT c.stock_id
-        FROM carts c
-        WHERE user_id = ?
-      )
-    );`, [ userId ]
+    WHERE s.product_id = ${productIdInUserCart}`
   );
 }
 
