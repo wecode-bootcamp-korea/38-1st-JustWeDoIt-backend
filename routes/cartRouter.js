@@ -1,7 +1,7 @@
 const express = require('express');
 const { loginRequired } = require('../utils/auth');
 
-const { getCartItem, createCartItem, deleteCartItem } = require('../controllers/cartController');
+const { getCartItem, createCartItem, updateCartItem, deleteCartItem } = require('../controllers/cartController');
 
 const router = express.Router();
 
