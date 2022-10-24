@@ -25,12 +25,28 @@ const getCartItem = async (req, res) => {
   const userId = req.params.userId;
 
   const data = await cartService.getCartByUserId(userId);
-  const stockInfo = await cartService.getStockByUserId(userId);
+
+  let stockList = [];
+  let stockInfo = {};
+  
+  for (let i = 0; i < data.length; i++) {
+    stockList = await cartService.sizeStock(data[i].productId);
+
+    stockList !== 0 &&
+    stockList.map((el) => {
+      const {size, stock} = el;
+      
+      stockInfo = {...stockInfo,
+        [size] : stock
+      }
+    })
+
+    data[i].stockInfo = stockInfo
+  }
 
   return res.status(200).json({ 
     message : 'SUCCESS',
-    data : data,
-    stockInfo : stockInfo
+    data : data
   });
 }
 

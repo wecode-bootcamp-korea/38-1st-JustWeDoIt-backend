@@ -29,6 +29,19 @@ const createCartItem = async (userId, stockId) => {
   }
 }
 
+const sizeStock = async (productId) => {
+  const sizeStock = await database.query(`
+    SELECT
+      size,
+      stock
+    FROM
+      stock
+    WHERE product_id = ?;`, [ productId ]
+  )
+
+  return sizeStock;
+}
+
 const getCartByUserId = async (userId) => {
   const cart = await database.query(`
     SELECT
@@ -54,38 +67,7 @@ const getCartByUserId = async (userId) => {
     WHERE c.user_id = ?;`, [ userId ]
   );
 
-  const cartObj = JSON.parse(JSON.stringify(cart));
-  const productId = cartObj.productId
-
-  // size : stock 
-  // 객체 만들고 데이터 안에 끼워서 응답
-
-  return result;
-}
-
-const getStockByUserId = async (userId) => {
-  const stockId = await database.query(`
-    SELECT c.stock_id
-    FROM carts c
-    WHERE user_id = ?;`, [ userId ]
-  );
-  const stockIdObj = JSON.parse(stockId);
-
-  const productId = await database.query(`
-    SELECT s.product_id
-    FROM stock s
-    WHERE id = ?;`, [ stockIdObj ]
-  );
-  const productIdObj = JSON.parse(productId);
-  // productIdObj 안에 있는 숫자 값들이 (1, 2, 10) 형태로 들어가야 함
-
-  return await database.query(`
-    SELECT
-      size,
-      stock
-    FROM stock
-    WHERE product_id IN (?);`, [ productIdObj ]
-  );
+  return cart;
 }
 
 const updateCartItem = async (userId, cartId, stockId, quantity) => {
@@ -118,8 +100,8 @@ const deleteCartItem = async (userId, stockId) => {
 
 module.exports = {
   createCartItem,
+  sizeStock,
   getCartByUserId,
-  getStockByUserId,
   updateCartItem,
   deleteCartItem,
 }

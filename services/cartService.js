@@ -4,12 +4,12 @@ const createCartItem = async (userId, stockId) => {
   return await cartDao.createCartItem(userId, stockId)
 }
 
-const getCartByUserId = async (userId) => {
-  return await cartDao.getCartByUserId(userId)
+const sizeStock = async (productId) => {
+  return await cartDao.sizeStock(productId)
 }
 
-const getStockByUserId = async (userId) => {
-  return await cartDao.getStockByUserId(userId)
+const getCartByUserId = async (userId) => {
+  return await cartDao.getCartByUserId(userId)
 }
 
 const updateCartItem = async (userId, cartId, stockId, quantity) => {
@@ -30,8 +30,8 @@ const deleteCartItem = async (userId, stockId) => {
 
 module.exports = {
   createCartItem,
+  sizeStock,
   getCartByUserId,
-  getStockByUserId,
   updateCartItem,
   deleteCartItem,
 }
