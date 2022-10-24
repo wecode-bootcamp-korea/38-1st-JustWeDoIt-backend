@@ -18,7 +18,7 @@ const createCartItem = async (userId, stockId) => {
     )
   } else {
     const data = await database.query(`
-    INSERT INTO carts (
+    INSERT INTO carts (0
       user_id,
       stock_id
     ) VALUES (?, ?);`,
@@ -30,11 +30,12 @@ const createCartItem = async (userId, stockId) => {
 }
 
 const getCartByUserId = async (userId) => {
-  const result = await database.query(`
+  const cart = await database.query(`
     SELECT
       c.id AS cartId,
       c.user_id AS userId, 
       c.stock_id AS stockId,
+      p.id AS productId,
       p.name AS productName, 
       p.price, 
       c.quantity AS buyingQuantity,
@@ -53,32 +54,37 @@ const getCartByUserId = async (userId) => {
     WHERE c.user_id = ?;`, [ userId ]
   );
 
+  const cartObj = JSON.parse(JSON.stringify(cart));
+  const productId = cartObj.productId
+
+  // size : stock 
+  // 객체 만들고 데이터 안에 끼워서 응답
+
   return result;
 }
 
 const getStockByUserId = async (userId) => {
-  const stockIdInUserCart = await database.query(`
+  const stockId = await database.query(`
     SELECT c.stock_id
     FROM carts c
     WHERE user_id = ?;`, [ userId ]
   );
+  const stockIdObj = JSON.parse(stockId);
 
-  const productIdInUserCart = await database.query(`
+  const productId = await database.query(`
     SELECT s.product_id
     FROM stock s
-    WHERE id = ${stockIdInUserCart}`
+    WHERE id = ?;`, [ stockIdObj ]
   );
-  
+  const productIdObj = JSON.parse(productId);
+  // productIdObj 안에 있는 숫자 값들이 (1, 2, 10) 형태로 들어가야 함
+
   return await database.query(`
     SELECT
-      s.product_id AS productId,
-      p.name AS productName,
-      s.id AS stockId,
-      s.size,
-      s.stock AS stockQuantity
-    FROM stock s
-    JOIN products p ON s.product_id = p.id
-    WHERE s.product_id = ${productIdInUserCart}`
+      size,
+      stock
+    FROM stock
+    WHERE product_id IN (?);`, [ productIdObj ]
   );
 }
 
