@@ -14,7 +14,7 @@ const requestMain = async (offset, limit, size, gender, special, price, headerFi
     
 
 
-    const main = await mainDao.requestMain(numberOffset, numberLimit);
+    const main = await mainDao.requestMain(numberOffset, numberLimit,size, gender, special, price, headerFilter);
 
     return main;
 }

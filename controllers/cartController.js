@@ -25,12 +25,12 @@ const getCartItem = async (req, res) => {
   const userId = req.params.userId;
 
   const data = await cartService.getCartByUserId(userId);
-  const stockInfo = await cartService.getStockByUserId(userId);
+  // const stockInfo = await cartService.getStockByUserId(userId);
 
   return res.status(200).json({ 
-    message : 'SUCCESS',
+    // message : 'SUCCESS',
     data : data,
-    stockInfo : stockInfo
+    // stockInfo : stockInfo
   });
 }
 
