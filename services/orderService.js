@@ -1,5 +1,5 @@
 const { orderDao } = require('../models');
-//const { checkStock } = require('../utils/checkStock');
+//const { checkStk } = require('../utils/checkStock');
 
 const orderAdd = async (user_id, cart_id) => {
   if (!user_id || !cart_id) {
