@@ -1,11 +1,13 @@
 const dataSource = require('./dataSource');
-const mainDao = require('./mainDao');
+const productDao = require('./productDao');
 const moveProductDao = require('./moveProductDao')
 const userDao = require('./userDao')
 
-module.exports = { mainDao, 
+module.exports = { 
+	productDao, 
 	dataSource, 
 	moveProductDao, 
 	dataSource,
-	userDao};
+	userDao
+};
 

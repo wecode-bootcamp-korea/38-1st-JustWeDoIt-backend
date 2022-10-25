@@ -1,6 +1,6 @@
 const {database} = require('./dataSource');
 
-const requestMain = async ( offset, limit, size, gender, special, price ,headerFilter) => {
+const getProducts = async ( offset, limit, size, gender, special, price ,headerFilter) => {
     const whereTrigger = async (size, gender, special, price) => {
         if( size ||  gender || special || price ){
             return ` WHERE `;
@@ -205,4 +205,4 @@ const categoryFilter = async (categoryId) => {
     WHERE c.id = ?
     `,[categoryId])
 }
-module.exports = { requestMain,requestAllMain,categoryFilter };
+module.exports = { getProducts,requestAllMain,categoryFilter };
