@@ -29,6 +29,22 @@ const createCartItem = async (userId, stockId) => {
   }
 }
 
+const stockIdToSize = async (stockId) => {
+  return await database.query(`
+    SELECT size
+    FROM stock
+    WHERE id = ?;`, [ stockId ]
+  )
+}
+
+const sizeToStockId = async (productId, size) => {
+  return await database.query(`
+    SELECT id
+    FROM stock
+    WHERE product_id = ? AND size = ?;`, [ productId, size ]
+  )
+}
+
 const sizeStock = async (productId) => {
   const sizeStock = await database.query(`
     SELECT
@@ -45,12 +61,15 @@ const sizeStock = async (productId) => {
 const getCartByCartId = async (cartId) => {
   return await database.query(`
     SELECT
-      id AS cartId,
-      user_id AS userId,
-      stock_id AS stockId,
-      quantity AS buyingQuantity
-    FROM carts
-    WHERE id = ?;`, [ cartId ])
+      c.id AS cartId,
+      c.user_id AS userId,
+      c.stock_id AS stockId,
+      s.size,
+      c.quantity AS buyingQuantity
+    FROM carts c
+    JOIN stock s ON c.stock_id = s.id
+    WHERE c.id = ?;`, [ cartId ]
+  )
 }
 
 const getCartByUserId = async (userId) => {
@@ -106,11 +125,13 @@ const deleteCartItem = async (userId, stockId) => {
   return await database.query(`
       DELETE FROM carts
       WHERE user_id = ? AND stock_id = ?;`, [ userId, stockId ]
-    )
+  )
 }
 
 module.exports = {
   createCartItem,
+  stockIdToSize,
+  sizeToStockId,
   sizeStock,
   getCartByCartId,
   getCartByUserId,

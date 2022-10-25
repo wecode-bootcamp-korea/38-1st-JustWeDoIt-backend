@@ -26,24 +26,6 @@ const getCartItem = async (req, res) => {
 
   const data = await cartService.getCartByUserId(userId);
 
-  let stockList = [];
-  let stockInfo = {};
-  
-  for (let i = 0; i < data.length; i++) {
-    stockList = await cartService.sizeStock(data[i].productId);
-
-    stockList !== 0 &&
-    stockList.map((el) => {
-      const {size, stock} = el;
-      
-      stockInfo = {...stockInfo,
-        [size] : stock
-      }
-    })
-
-    data[i].stockInfo = stockInfo
-  }
-
   return res.status(200).json({ 
     message : 'SUCCESS',
     data : data
@@ -53,12 +35,9 @@ const getCartItem = async (req, res) => {
 const updateCartItem = async (req, res) => {
   // const userId = req.user.id;
   const userId = req.params.userId;
-  const { cartId, stockId, buyingQuantity } = req.body;
+  const { cartId, productId, newSize, buyingQuantity } = req.body;
 
-  console.log(req.body);
-
-
-  await cartService.updateCartItem(userId, cartId, stockId, buyingQuantity);
+  await cartService.updateCartItem(userId, cartId, productId, newSize, buyingQuantity);
 
   const data = await cartService.getCartByUserId(userId);
 
@@ -81,7 +60,7 @@ const deleteCartItem = async (req, res) => {
 
   await cartService.deleteCartItem(userId, stockId);
 
-  return res.status(204);
+  return res.status(204).json({});
 }
 
 module.exports = {
