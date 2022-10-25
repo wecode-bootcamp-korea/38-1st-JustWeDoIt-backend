@@ -23,4 +23,7 @@ const requestAllMain = async ()=>{
         return await mainDao.requestAllMain();
 }
 
-module.exports = { requestMain,requestAllMain };
+const categoryFilter = async (categoryId) => {
+        return await mainDao.categoryFilter(categoryId);
+}
+module.exports = { requestMain,requestAllMain,categoryFilter };

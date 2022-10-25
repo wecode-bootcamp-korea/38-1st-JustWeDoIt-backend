@@ -188,4 +188,21 @@ const requestAllMain = async () => {
     )
 }
 
-module.exports = { requestMain,requestAllMain };
+
+const categoryFilter = async (categoryId) => {
+    return await database.query(`
+    SELECT
+        products.id AS productId,
+        products.name AS name,
+        products.thumbnail_image_url AS thumbnailImageUrl,
+        c.name AS category,
+        s.name AS special,
+        g.gender AS gender
+    FROM products
+    JOIN categories c ON products.category_id=c.id
+    JOIN special s ON products.special_id=s.id
+    JOIN gender g ON products.gender_id=g.id
+    WHERE c.id = ?
+    `,[categoryId])
+}
+module.exports = { requestMain,requestAllMain,categoryFilter };
