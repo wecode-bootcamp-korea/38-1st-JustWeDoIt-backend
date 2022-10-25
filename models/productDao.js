@@ -7,7 +7,8 @@ const getStockByProductId = async (productId) => {
       p.name AS productName,
       s.id AS stockId,
       s.size,
-      s.stock AS stockQuantity
+      s.stock AS stockQuantity,
+      s.id AS stockId
     FROM stock s
     JOIN products p ON s.product_id = p.id
     WHERE s.product_id = ?;` [ productId ]

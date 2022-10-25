@@ -35,6 +35,7 @@ const getCartByUserId = async (userId) => {
       c.id AS cartId,
       c.user_id AS userId, 
       c.stock_id AS stockId,
+      p.id AS productId,
       p.name AS productName, 
       p.price, 
       c.quantity AS buyingQuantity,
@@ -52,6 +53,17 @@ const getCartByUserId = async (userId) => {
     JOIN gender ON p.gender_id = gender.id
     WHERE c.user_id = ?;`, [ userId ]
   );
+
+  let arr = [];
+  for (let i = 0; i < result.length; i++) {
+    arr.push(result[i].productId)
+  }
+  console.log(arr)
+  // 중복제거 필요
+  const uniqueArr = arr.filter((element, index) => {
+    return arr.indexOf(element) === index;
+});
+console.log(uniqueArr);
 
   return result;
 }

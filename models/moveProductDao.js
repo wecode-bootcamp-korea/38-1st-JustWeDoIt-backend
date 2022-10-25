@@ -30,19 +30,21 @@ const requestProduct = async (productId) => {
     const data = await database.query(
         `
         SELECT DISTINCT
-            p.id,
+            p.id AS productId,
             p.name AS productName,
             p.description,
             p.price,
             c.name AS category,
             s.name AS special,
             g.gender,
-            p.thumbnail_image_url AS thumbnailImage
+            p.thumbnail_image_url AS thumbnailImage,
+            stock.id AS stockId
         FROM products p
         JOIN categories c ON p.category_id = c.id
         JOIN special s ON p.special_id = s.id
         JOIN gender g ON p.gender_id = g.id
         JOIN product_images i ON p.id = i.product_id
+        JOIN stock ON p.id = stock.product_id
         WHERE p.id = ?
     `
     ,
