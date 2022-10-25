@@ -3,19 +3,19 @@ const createUser = async (name, email, residentNumberFront, residentNumberBack, 
   const result = await database.query(`
 	  INSERT INTO users (
 	    name, 
-		email, 
-		resident_number_front,
-		resident_number_back, 
-		password
+			email, 
+			resident_number_front,
+			resident_number_back, 
+			password
 	  ) VALUES (
-		?,
-		?, 
-		?, 
-        ?,
-	    ?
+			?,
+			?, 
+			?, 
+			?,
+			?
 	  )`, [name, email, residentNumberFront, residentNumberBack, password]
   )
-
+	
   return result.insertId
 }
 

@@ -9,15 +9,15 @@ const signUp = catchAsync(async (req, res) => {
   res.status(201).json({ insertId });
 })
 
-    const signIn = async (req, res) => {
-    const { email, password } = req.body;
+const signIn = async (req, res) => {
+const { email, password } = req.body;
 
     try {
-        const accesstoken = await userService.signIn(email, password)
+        const accessToken = await userService.signIn(email, password)
         res.status(200).json({ 
-            accesstoken,
+            accessToken,
             message : 'SUCCESS'
-         })
+        })
     } catch (error) {
         res.status(error.statusCode).json({ message: error.message });
     }
