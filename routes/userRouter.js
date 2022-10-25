@@ -1,1 +1,0 @@
-router.post('/checkout', userController.checkout)
