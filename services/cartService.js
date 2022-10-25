@@ -12,14 +12,14 @@ const getCartByUserId = async (userId) => {
   return await cartDao.getCartByUserId(userId)
 }
 
-const updateCartItem = async (userId, cartId, stockId, quantity) => {
-  const cart = await cartDao.getCartByUserId(userId);
+const updateCartItem = async (userId, cartId, stockId, buyingQuantity) => {
+  const cart = await cartDao.getCartByCartId(cartId);
 
   return await cartDao.updateCartItem(
     userId,
     cartId,
     stockId ? stockId : cart.stockId,
-    quantity ? quantity : cart.buyingQuantity
+    buyingQuantity ? buyingQuantity : cart.buyingQuantity
   )
 }
 

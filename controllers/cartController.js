@@ -53,9 +53,14 @@ const getCartItem = async (req, res) => {
 const updateCartItem = async (req, res) => {
   // const userId = req.user.id;
   const userId = req.params.userId;
-  const { cartId, stockId, quantity } = req.body;
+  const { cartId, stockId, buyingQuantity } = req.body;
 
-  const data = await cartService.updateCartItem(userId, cartId, stockId, quantity);
+  console.log(req.body);
+
+
+  await cartService.updateCartItem(userId, cartId, stockId, buyingQuantity);
+
+  const data = await cartService.getCartByUserId(userId);
 
   return res.status(201).json({
     message : 'SUCCESS',

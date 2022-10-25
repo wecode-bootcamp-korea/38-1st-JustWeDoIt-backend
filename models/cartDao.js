@@ -42,6 +42,17 @@ const sizeStock = async (productId) => {
   return sizeStock;
 }
 
+const getCartByCartId = async (cartId) => {
+  return await database.query(`
+    SELECT
+      id AS cartId,
+      user_id AS userId,
+      stock_id AS stockId,
+      quantity AS buyingQuantity
+    FROM carts
+    WHERE id = ?;`, [ cartId ])
+}
+
 const getCartByUserId = async (userId) => {
   const cart = await database.query(`
     SELECT
@@ -70,13 +81,13 @@ const getCartByUserId = async (userId) => {
   return cart;
 }
 
-const updateCartItem = async (userId, cartId, stockId, quantity) => {
+const updateCartItem = async (userId, cartId, stockId, buyingQuantity) => {
   const updatedRows = (await database.query(`
     UPDATE carts
     SET
       stock_id = ?,
       quantity = ?
-    WHERE id = ?, user_id = ?;`, [ stockId, quantity, cartId, userId ]    
+    WHERE id = ? AND user_id = ?;`, [ stockId, buyingQuantity, cartId, userId ]    
   )).affectedRows
   // 변수 선언 후 실행하는 코드는 없어도 되는지?
 
@@ -85,7 +96,7 @@ const updateCartItem = async (userId, cartId, stockId, quantity) => {
   const result = await database.query(`
     SELECT *
     FROM carts
-    WHERE id = ?, user_id = ?;`, [ cartId, userId ]
+    WHERE id = ? AND user_id = ?;`, [ cartId, userId ]
     );
 
   return result;
@@ -101,6 +112,7 @@ const deleteCartItem = async (userId, stockId) => {
 module.exports = {
   createCartItem,
   sizeStock,
+  getCartByCartId,
   getCartByUserId,
   updateCartItem,
   deleteCartItem,
