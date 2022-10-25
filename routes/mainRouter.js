@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.get('/main',mainController.requestAllMain);
 router.get('/mains',mainController.requestMain);
-
+router.get('/mains/:categoryId', mainController.categoryFilter);
 router.get('/details',moveProductController.requestProduct);
 
 module.exports = router;

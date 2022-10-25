@@ -1,5 +1,10 @@
+const userController= require('./userController')
 const mainController = require('./mainController');
 const moveProductController = require('./moveProductController');
 
 
-module.exports = { mainController, moveProductController};
+module.exports = { 
+	userController,
+	mainController, 
+	moveProductController
+}
