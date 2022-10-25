@@ -1,6 +1,10 @@
 const cartDao = require('../models/cartDao');
 
-const createCartItem = async (userId, stockId) => {
+const createCartItem = async (userId, productId, size) => {
+
+  const [ data ] = await cartDao.sizeToStockId(productId, size);
+  const stockId = data.id;
+
   return await cartDao.createCartItem(userId, stockId)
 }
 
@@ -47,7 +51,7 @@ const updateCartItem = async (userId, cartId, productId, newSize, buyingQuantity
   let changedSize = newSize ? newSize : cart.size
   const [ data ] = await cartDao.sizeToStockId(productId, changedSize);
   const stockId = Object.values(data);
-
+ 
   return await cartDao.updateCartItem(
     userId,
     cartId,

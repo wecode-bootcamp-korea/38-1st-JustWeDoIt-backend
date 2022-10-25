@@ -4,15 +4,16 @@ const { catchAsync } = require('../utils/error');
 const createCartItem = async (req, res) => {
   // const userId = req.user;
   const userId = req.params.userId;
-  const stockId = req.params.stockId;
+  const { productId, size } = req.body;
 
-  if (!stockId) {
+  if (!productId || !size) {
     const err = new Error('KEY_ERROR');
     err.statusCode = 400;
     throw err;
   }
 
-  const data = await cartService.createCartItem(userId, stockId);
+  await cartService.createCartItem(userId, productId, size);
+  const data = await cartService.getCartByUserId(userId);
 
   return res.status(201).json({ 
     message : 'CART_ITEM_CREATED',

@@ -6,7 +6,7 @@ const { getCartItem, createCartItem, updateCartItem, deleteCartItem } = require(
 const router = express.Router();
 
 // router.post('/:stockId', loginRequired, createCartItem);
-router.post('/:stockId/:userId', createCartItem);
+router.post('/:userId', createCartItem);
 // router.get('', loginRequired, getCartItem);
 router.get('/:userId', getCartItem);
 // router.patch('/:stockId', loginRequired, );

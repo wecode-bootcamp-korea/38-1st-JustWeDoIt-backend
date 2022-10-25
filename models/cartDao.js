@@ -17,15 +17,13 @@ const createCartItem = async (userId, stockId) => {
       WHERE user_id = ? AND stock_id = ?;`, [ userId, stockId ]
     )
   } else {
-    const data = await database.query(`
-    INSERT INTO carts (0
-      user_id,
-      stock_id
-    ) VALUES (?, ?);`,
-    [ userId, stockId ]
-  );
-
-  return data;
+    return await database.query(`
+      INSERT INTO carts (
+        user_id,
+        stock_id
+      ) VALUES (?, ?);`,
+      [ userId, stockId ]
+    );
   }
 }
 
