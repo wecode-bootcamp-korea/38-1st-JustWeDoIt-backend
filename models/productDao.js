@@ -20,18 +20,18 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
     }
 
     const sizeFilter = async (size) => {
-    
+        console.log({'싸아아아아아아아아이이이이이이ㅣ쯔으으으우우우' : size})
         if(size){
-            let shiftDeleteSize =size.replace(size[0],'')
-            console.log({'this is AAAAAA' : shiftDeleteSize})
-            let shiftPopDeleteSize = shiftDeleteSize.replace(size[size.length-1],'')
-            console.log({'this is BBBBBBB':shiftPopDeleteSize})
+            // let shiftDeleteSize =size.replace(size[0],'')
+            // console.log({'this is AAAAAA' : shiftDeleteSize})
+            // let shiftPopDeleteSize = shiftDeleteSize.replace(size[size.length-1],'')
+            // console.log({'this is BBBBBBB':shiftPopDeleteSize})
 
             if(gender || special || price){
-                return ` AND k.size IN (${shiftPopDeleteSize})`
+                return ` AND k.size IN (${size})`
             }
             if(!gender && !special && !price){
-                return ` k.size IN (${shiftPopDeleteSize})`
+                return ` k.size IN (${size})`
             }
         }
         if(!size){
@@ -62,10 +62,10 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
     const specialFilter = async (special) => {
         switch(special){
           case `친환경`:
-                if(gender) return ` OR s.id=1 `
+                if(gender) return ` AND s.id=1 `
                 if(!gender) return ` s.id=1`
           case `환경파괴소재`:
-                if(gender) return ` OR s.id=2`
+                if(gender) return ` AND s.id=2`
                 if(!gender) return ` s.id=2`
           default:
               return ``
@@ -79,10 +79,17 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
         let priceCount = price.split('~')
         console.log({'priceCount???':priceCount})
 
-        if(priceCount.length === 2){
+        if(priceCount.length <= 2){
         let a = price.replace('~','AND')
-        return ` products.price BETWEEN ${a} `
+        if(gender || special){
+            console.log({'price' : price,'gender':gender,'special':special})
+        return ` AND products.price BETWEEN ${a} `
+        }else{
+            return `products.price BETWEEN ${a}`
         }
+        }
+        
+
 
         if (priceCount.length > 2){
         const firstSpace = price.indexOf(' ');
@@ -93,16 +100,13 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
         console.log('resasdfsdsafsfsfsfsadfsfdfsdafsdfsdfsffsaf',result)
         let realResult = result.replace(' ',' AND ');
         console.log({'realResult는 여기에요':realResult})
-        if(price && (gender || special)){
+        if(gender || special){
             return ` AND products.price BETWEEN ${realResult}`
         }
-        if(size){
-            return `products.price BETWEEN ${realResult}`
+        else{
+            return ` products.price BETWEEN ${realResult}`
         }
-        if(!size && !gender && !special){
-            console.log('111231231234123123213213213122121212121321312312123123123123123')
-            return ` products.price BETWEEN ${realResult} `
-        }
+       
         }
     }
     const headerFilterFilter = async (headerFilter) => {
