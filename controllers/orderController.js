@@ -14,18 +14,18 @@ const orderAdd = catchAsync(async (req, res) => {
   });
 });
 
-const orderItems = catchAsync(async (req, res) => { 
+// const orderItems = catchAsync(async (req, res) => { 
   
-  const { orderId,userId } = req.body;
-  //const userId = req.user;
+//   const { orderId,userId } = req.body;
+//   //const userId = req.user;
  
-  const orderInfo = await orderService.orderItems(userId, orderId);
+//   const orderInfo = await orderService.orderItems(userId, orderId);
 
-  res.status(201).json({
-    userId: userId,
-    data: orderInfo
-  });
-});
+//   res.status(201).json({
+//     userId: userId,
+//     data: orderInfo
+//   });
+// });
 
 // const shippingInfo = catchAsync(async (req, res) => { 
   
