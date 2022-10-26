@@ -1,4 +1,4 @@
-const { productService } = require('../services')
+const { moveProductService } = require('../services')
 const { catchAsync } = require('../utils/error');
 
 
@@ -6,8 +6,7 @@ const requestProduct = catchAsync(async (req, res) => {
 
     const productId = req.query.id;
 
-    const data = await productService.requestProduct(productId);
-    // console.log(data);
+    const data = await moveProductService.requestProduct(+productId);
     res.status(200).json( data );
 })
 

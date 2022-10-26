@@ -14,7 +14,11 @@ const requestAllMain = async ()=>{
         return await productDao.requestAllMain();
 }
 
-const categoryFilter = async (categoryId) => {
-        return await productDao.categoryFilter(categoryId);
+const categoryFilter = async (id , offset , limit ) => {
+
+        let numberOffset = Number(offset);
+        let numberLimit = Number(limit);
+        
+        return await productDao.categoryFilter(id , numberOffset , numberLimit );
 }
 module.exports = { getProducts,requestAllMain,categoryFilter };

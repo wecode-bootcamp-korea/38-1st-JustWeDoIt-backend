@@ -20,13 +20,7 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
     }
 
     const sizeFilter = async (size) => {
-        console.log({'싸아아아아아아아아이이이이이이ㅣ쯔으으으우우우' : size})
         if(size){
-            // let shiftDeleteSize =size.replace(size[0],'')
-            // console.log({'this is AAAAAA' : shiftDeleteSize})
-            // let shiftPopDeleteSize = shiftDeleteSize.replace(size[size.length-1],'')
-            // console.log({'this is BBBBBBB':shiftPopDeleteSize})
-
             if(gender || special || price){
                 return ` AND k.size IN (${size})`
             }
@@ -73,16 +67,13 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
       }
     const priceFilter = async (price) =>{
         if(!price){
-            console.log('여기에요 여기~ price가 없어요~')
             return ``
         }
         let priceCount = price.split('~')
-        console.log({'priceCount???':priceCount})
 
         if(priceCount.length <= 2){
         let a = price.replace('~','AND')
         if(gender || special){
-            console.log({'price' : price,'gender':gender,'special':special})
         return ` AND products.price BETWEEN ${a} `
         }else{
             return `products.price BETWEEN ${a}`
@@ -94,12 +85,9 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
         if (priceCount.length > 2){
         const firstSpace = price.indexOf(' ');
         const lastSpace = price.lastIndexOf(' ');
-        console.log('가ㅏ가가가가가각가가가가ㅏ가ㅏ가가가ㅏ가가가가ㅏ',price)
        
         let result = price.replace(price.slice(firstSpace,lastSpace),'');
-        console.log('resasdfsdsafsfsfsfsadfsfdfsdafsdfsdfsffsaf',result)
         let realResult = result.replace(' ',' AND ');
-        console.log({'realResult는 여기에요':realResult})
         if(gender || special){
             return ` AND products.price BETWEEN ${realResult}`
         }
@@ -141,7 +129,6 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
 
     let whereString = whereStringArray.toString();
     let realWhereString = whereString.replaceAll(',','');
-
     let resultWhereWhithoutSize = realWhereString.replaceAll(',',' AND ');
 
     let resultWhere = resultWhereWhithoutSize.concat(sizeFilterAsync);
@@ -166,9 +153,8 @@ const getProducts = async ( offset, limit, size, gender, special, price ,headerF
             ${whereTriggerAsync}${resultWhere}
             ORDER BY ${headerFilterFilterAsync} products.id LIMIT ? OFFSET ? 
             `
-            ,[ limit, offset ] // where and 자동으로 넣기 > replaceAll() 이랑 배열의 ''가 있는 경우 제거하는 로직 구성
+            ,[ limit, offset ]
     )
-    // console.log(main);
     return main;
 }
 
@@ -187,18 +173,19 @@ const requestAllMain = async () => {
             JOIN categories c ON products.category_id=c.id
             JOIN special s ON products.special_id=s.id
             JOIN gender g ON products.gender_id=g.id
-            ORDER BY products.id
+            ORDER BY products.id 
         `
     )
 }
 
 
-const categoryFilter = async (categoryId) => {
+const categoryFilter = async (id , offset , limit ) => {
     return await database.query(`
     SELECT
-        products.id AS productId,
+        products.id AS id,
         products.name AS name,
         products.thumbnail_image_url AS thumbnailImageUrl,
+        products.price AS price,
         c.name AS category,
         s.name AS special,
         g.gender AS gender
@@ -207,6 +194,7 @@ const categoryFilter = async (categoryId) => {
     JOIN special s ON products.special_id=s.id
     JOIN gender g ON products.gender_id=g.id
     WHERE c.id = ?
-    `,[categoryId])
+    ORDER BY products.id LIMIT ? OFFSET ?
+    `,[id , limit, offset ])
 }
 module.exports = { getProducts,requestAllMain,categoryFilter };
