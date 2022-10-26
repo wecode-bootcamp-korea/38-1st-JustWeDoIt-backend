@@ -36,7 +36,7 @@ const getUserByEmail = async (email) => {
 }
 
 const getUserById = async (id) => {
-	const result = await dataSource.query(`
+	const result = await database.query(`
 		SELECT 
 			id,
 			name,
@@ -50,8 +50,6 @@ const getUserById = async (id) => {
 
 	return result[0]
 }
-
-
 
 module.exports = { 
 	createUser,
