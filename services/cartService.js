@@ -1,75 +1,53 @@
 const cartDao = require('../models/cartDao');
 
-const createCartItem = async (userId, productId, size) => {
-
-  const [ data ] = await cartDao.sizeToStockId(productId, size);
-  const stockId = data.id;
-
+const createCartItem = async (userId, stockId) => {
   return await cartDao.createCartItem(userId, stockId)
-}
-
-const stockIdToSize = async (stockId) => {
-  return await cartDao.stockIdToSize(stockId)
-}
-
-const sizeToStockId = async (size) => {
-  return await cartDao.sizeToStockId(size)
-}
-
-const sizeStock = async (productId) => {
-  return await cartDao.sizeStock(productId)
+  /*
+    상품 상세페이지에서 데이터를 반환할 때, 아와 같은 구조로 만들어 주세요.
+    {
+      "data" : {
+        "productId" : 1,
+        "name" : "A",
+        "stocks" : [
+          {
+            "stock_id" : 1,
+            "size" : 230,
+            "stock" : 10
+          },
+          {
+            "stock_id" : 2,
+            "size" : 240,
+            "stock" : 50
+          },
+          ..
+        ]   
+      }
+    }
+  */
 }
 
 const getCartByUserId = async (userId) => {
-  const data = await cartDao.getCartByUserId(userId);
-
-  let stockList = [];
-  let stockInfo = {};
-  
-  for (let i = 0; i < data.length; i++) {
-    stockList = await cartDao.sizeStock(data[i].productId);
-
-    stockList !== 0 &&
-    stockList.map((el) => {
-      const {size, stock} = el;
-      
-      stockInfo = {...stockInfo,
-        [size] : stock
-      }
-    })
-
-    data[i].stockInfo = stockInfo
-  }
-
-  return data;
+  return await cartDao.getCartByUserId(userId);
 }
 
-const updateCartItem = async (userId, cartId, productId, newSize, buyingQuantity) => {
-
+const updateCart = async (userId, cartId, stockId, quantity) => {
   const [ cart ] = await cartDao.getCartByCartId(cartId);
 
-  let changedSize = newSize ? newSize : cart.size
-  const [ data ] = await cartDao.sizeToStockId(productId, changedSize);
-  const stockId = Object.values(data);
- 
-  return await cartDao.updateCartItem(
+  return await cartDao.updateCart(
     userId,
     cartId,
     stockId ? stockId : cart.stockId,
-    buyingQuantity ? buyingQuantity : cart.buyingQuantity
+    quantity ? quantity : cart.quantity
   )
 }
 
-const deleteCartItem = async (userId, stockId) => {
-  return await cartDao.deleteCartItem(userId, stockId)
+const deleteCart = async (userId, cartId) => {
+  return await cartDao.deleteCart(userId, cartId)
 }
 
 
 module.exports = {
   createCartItem,
-  stockIdToSize,
-  sizeToStockId,
-  sizeStock,
   getCartByUserId,
   updateCartItem,
   deleteCartItem,

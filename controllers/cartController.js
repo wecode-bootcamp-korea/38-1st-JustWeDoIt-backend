@@ -1,17 +1,16 @@
 const cartService = require('../services/cartService');
-const { catchAsync } = require('../utils/error');
 
-const createCartItem = async (req, res) => {
+const createCarts = async (req, res) => {
   const userId = req.user;
-  const { productId, size } = req.body;
+  const { stockId } = req.body;
 
-  if (!productId || !size) {
+  if (!stockId) {
     const err = new Error('KEY_ERROR');
     err.statusCode = 400;
     throw err;
   }
 
-  await cartService.createCartItem(userId, productId, size);
+  await cartService.createCarts(userId, stockId);
   const data = await cartService.getCartByUserId(userId);
 
   return res.status(201).json({ 
@@ -20,10 +19,10 @@ const createCartItem = async (req, res) => {
   });
 }
 
-const getCartItem = async (req, res) => {
+const getCarts = async (req, res) => {
   const userId = req.user;
 
-  const data = await cartService.getCartByUserId(userId);
+  const data = await cartService.getCartsByUserId(userId);
 
   return res.status(200).json({ 
     message : 'SUCCESS',
@@ -31,33 +30,35 @@ const getCartItem = async (req, res) => {
   });
 }
 
-const updateCartItem = async (req, res) => {
-  const userId = req.user;
-  const { cartId, productId, newSize, buyingQuantity } = req.body;
+const updateCart = async (req, res) => {
+  // PATCH :8000/carts/10 <- 10은 cartId
+  const {
+    user: { userId },
+    params: { cartId },
+    body: {
+      productId,
+      newSize,
+      buyingQuantity
+    }
+  } = req
 
-  await cartService.updateCartItem(userId, cartId, productId, newSize, buyingQuantity);
-
-  const data = await cartService.getCartByUserId(userId);
+  const carts = await cartService.updateCart(userId, cartId, productId, newSize, buyingQuantity);
 
   return res.status(201).json({
     message : 'SUCCESS',
-    data : data 
+    data : carts
   });
+
 }
 
 const deleteCartItem = async (req, res) => {
+  // DELETE :8000/carts/10
   const userId = req.user;
-  const stockId = req.params.stockId;
-
-  if (!stockId) {
-    const err = new Error('KEY_ERROR');
-    err.statusCode = 400;
-    throw err;
-  }
+  const { cartId } = req.params
 
   await cartService.deleteCartItem(userId, stockId);
 
-  return res.status(204).json({});
+  return res.status(204).send();
 }
 
 module.exports = {
