@@ -1,5 +1,33 @@
 const {database} = require('./dataSource');
 
+const getProduct = async (productId) => {
+    const data = await database.query(
+        `
+        SELECT DISTINCT
+            p.id,
+            p.name AS productName,
+            p.description,
+            p.price,
+            c.name AS category,
+            s.name AS special,
+            g.gender,
+            p.thumbnail_image_url AS thumbnailImage,
+            JSON_ARRAYAGG(p.image_url) AS images,
+            // JSON_ARRAYAGG(s.size) AS stocks,
+        FROM products p
+        JOIN categories c ON p.category_id = c.id
+        JOIN special s ON p.special_id = s.id
+        JOIN gender g ON p.gender_id = g.id
+        JOIN product_images i ON p.id = i.product_id
+        WHERE p.id = ?
+        GROUP BY p.id
+    `
+    ,
+    [productId])
+
+    return data;
+}
+
 const getProducts = async ( offset, limit, size, gender, special, price ,headerFilter) => {
     const whereTrigger = async (size, gender, special, price) => {
         if( size ||  gender || special || price ){
