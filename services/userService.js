@@ -12,7 +12,7 @@ const hashPassword = async(plaintextPassword) => {
 }
 
 const getUserById = async (id) => {
-	      return await userDao.getUserById(id)
+	return await userDao.getUserById(id)
 }
 
 const signUp = async (name, email, residentNumberFront, residentNumberback, password) => {
@@ -28,7 +28,6 @@ const signUp = async (name, email, residentNumberFront, residentNumberback, pass
     residentNumberback,
     hashedPassword
   );
-  
   
   return createUser;
 };
@@ -50,9 +49,10 @@ const signIn = async (email, password) => {
     throw err;
   }
 
-  return jwt.sign({ sub: 'Access Token', aud: user.name, email: user.email, userId: user.id }, process.env.JWT_SECRET);
+  return jwt.sign({ sub: 'Access Token', aud: user.name, email: user.email, userId: user.id }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_EXPIRES_IN
+  });
 };
-
 
 module.exports = {
   signUp,
