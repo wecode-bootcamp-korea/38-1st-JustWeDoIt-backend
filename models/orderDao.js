@@ -2,47 +2,71 @@ const database = require('./dataSource');
 
 const { globalErrorHandler } = require('../utils/error');
 
-const orderAdd = async ( userId, orderId, orderNumber, orderStatusId) => { //주문에 넣어주기
-  const result = await database.query( //서비스에서 넣어준거 그대로
+const orderInfo = async ( userId, stockId, orderId, quantity) => { //주문에 넣어주기
+  
+  const cartUsers = await database.query( //서비스에서 넣어준거 그대로
     `
-    INSERT INTO orders
-    (
-      user_id=?
-      id=?,
-      order_number=?
-      order_status_id=?
-    )
-    VALUES ( ?, ?, ?, ? );
-    `,[ userId, orderId, orderNumber, orderStatusId ]
+    SELECT * FROM carts WHERE user_id = ?
+    `, [userId]);
+ 
+  const getCart = await database.query(
+    `
+    SELECT 
+      p.id,
+
+
+
+    `
+  const orderAdd = await database.query(
+    `INSERT INTO orders
+      (
+        order_number,
+        user_id,
+        order_status_id
+      )
+      VALUES ( ?, ?, ? )
+      `,[ stockId, orderId, quantity ]
+    );
+
+  const orderItem = await database.query(
+    `INSERT INTO order_items
+      (
+        stock_id,
+        order_id,
+        quantity
+      )
+      VALUES ( ?, ?, ? )
+    `,[ stockId, orderId, quantity ]
   );
-  globalErrorHandler(result);
+
+  globalErrorHandler(cartUsers, orderItem);
   return result.insertId;
 };
 
-const orderItems = async (userId, orderId ) => { //주문상품 조회
-  const result = await database.query(
-    `
-    SELECT 
-      p.id AS productId,
-      p.name AS productName,
-      p.thumbnail_image_url AS ProductThumbnailImageUrl,
-      p.price AS productPrice,
-      s.size AS Size,
-      oi.quantity AS quantity
+// const orderItems = async (userId, orderId) => { //주문상품 조회
+//   const result = await database.query(
+//     `
+//     SELECT 
+//       p.id AS productId,
+//       p.name AS productName,
+//       p.thumbnail_image_url AS ProductThumbnailImageUrl,
+//       p.price AS productPrice,
+//       s.size AS Size,
+//       oi.quantity AS quantity
 
-      FROM products p
-      JOIN stock s ON s.product_id = p.id
-      JOIN order_items oi ON oi.stock_id = s.id
-      JOIN order o s ON oi.order_id = o.id
-      JOIN users u s ON o.user_id = u.id
-      JOIN order_status os ON o.order_status_id = os.id
-      JOIN carts c s ON c.stock_id = s.id
-      WHERE user_id = ? AND order_id = ?
-    `,[userId, orderId]
-  );
-  globalErrorHandler(result);
-  return result;
-};
+//       FROM order_items oi
+//       JOIN stock s ON s.product_id = p.id
+//       JOIN order_items oi ON oi.stock_id = s.id
+//       JOIN order o s ON oi.order_id = o.id
+//       JOIN users u s ON o.user_id = u.id
+//       JOIN order_status os ON o.order_status_id = os.id
+//       JOIN carts c s ON c.stock_id = s.id
+//       WHERE user_id = ? AND order_id = ?
+//     `,[userId, orderId]
+//   );
+//   globalErrorHandler(result);
+//   return result;
+// };
 
 // const shippingInfo = async (userId, orderId, addresseeName, addresseeAddress, company, trackingNumber, shippingStatusId )=> { //수취인 입력
 //   const result = await database.query(
