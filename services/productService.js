@@ -21,4 +21,9 @@ const categoryFilter = async (id , offset , limit ) => {
         
         return await productDao.categoryFilter(id , numberOffset , numberLimit );
 }
-module.exports = { getProducts,requestAllMain,categoryFilter };
+
+const getStockByProductId = async (productId) => {
+  return await productDao.getStockByProductId(productId)
+}
+
+module.exports = { getProducts,requestAllMain,categoryFilter,getStockByProductId };

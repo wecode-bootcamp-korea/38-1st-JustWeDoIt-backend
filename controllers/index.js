@@ -6,5 +6,6 @@ const moveProductController = require('./moveProductController');
 module.exports = { 
 	userController,
 	productController, 
-	moveProductController
+	moveProductController,
+	cartController
 }

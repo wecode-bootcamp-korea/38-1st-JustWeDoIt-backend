@@ -1,4 +1,4 @@
-const {database} = require('./dataSource');
+const { database } = require('./dataSource');
 
 const getProducts = async ( offset, limit, size, gender, special, price ,headerFilter) => {
     const whereTrigger = async (size, gender, special, price) => {
@@ -197,4 +197,19 @@ const categoryFilter = async (id , offset , limit ) => {
     ORDER BY products.id LIMIT ? OFFSET ?
     `,[id , limit, offset ])
 }
-module.exports = { getProducts,requestAllMain,categoryFilter };
+const getStockByProductId = async (productId) => {
+    return await database.query(`
+      SELECT
+        s.product_id AS productId,
+        p.name AS productName,
+        s.id AS stockId,
+        s.size,
+        s.stock AS stockQuantity
+      FROM stock s
+      JOIN products p ON s.product_id = p.id
+      WHERE s.product_id = ?;` [ productId ]
+    );
+  }
+  
+
+module.exports = { getProducts,requestAllMain,categoryFilter,getStockByProductId };
