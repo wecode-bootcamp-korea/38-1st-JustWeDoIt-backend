@@ -1,7 +1,7 @@
 -- migrate:up
 CREATE TABLE orders(
     id INT NOT NULL AUTO_INCREMENT,
-    order_number VARCHAR(500) NOT NULL,
+    order_number VARCHAR(500) NULL,
     user_id INT NOT NULL,
     order_status_id INT NOT NULL,
     PRIMARY KEY(id), 
