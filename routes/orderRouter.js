@@ -1,12 +1,11 @@
 const express = require('express');
 const { orderController } = require('../controllers'); 
-const { loginRequired } = require('../utils/auth');
+//const { loginRequired } = require('../utils/auth');
 
 const router = express.Router();
 
-router.get('',  orderController.orderInfo);
-router.get('',  orderController.getCarts);
-router.post('',  orderController.orderAdd);
-router.post('',  orderController.orderItem); 
+router.get('/1',  orderController.orderInfo);
+router.get('/2',  orderController.getCarts);
+router.post('/3',  orderController.orderAdd);
 module.exports = router;
 

@@ -3,8 +3,8 @@ const { catchAsync } = require('../utils/error');
 
 const orderInfo = catchAsync(async (req, res) => { 
   
-  //const userId = req.user;
- 
+  const userId = req.body.userId;
+  
   const orderInfo = await orderService.orderInfo(userId); 
 
   res.status(201).json({
@@ -15,19 +15,19 @@ const orderInfo = catchAsync(async (req, res) => {
 
 const getCarts = catchAsync(async (req, res) => { 
   
-  //const userId = req.user;
+  const userId = req.body.userId;
  
-  const getCarts = await orderService.getCarts( userId); 
+  const getCarts = await orderService.getCarts(userId); 
 
   res.status(201).json({
-    userId: userId
+    data : getCarts 
   });
 });
 
 const orderAdd = catchAsync(async (req, res) => { 
   
-  const { getCarts, orderNumber, userId, orderStatusId } = req.body; 
-  //const userId = req.user;
+  const { userId } = req.body; 
+  //const  userId  = req.body;
  
   const orderAdd = await orderService.orderAdd( userId); 
 
@@ -36,21 +36,9 @@ const orderAdd = catchAsync(async (req, res) => {
   });
 });
 
-const orderItem = catchAsync(async (req, res) => { 
-  
-  const { stockId, orderId, quantity } = req.body; 
-  //const userId = req.user;
- 
-  const orderItem = await orderService.orderItem( userId); 
-
-  res.status(201).json({
-    userId: userId
-  });
-});
 
 module.exports = {
   orderInfo,
   getCarts,
-  orderAdd,
-  orderItem
+  orderAdd
 };
