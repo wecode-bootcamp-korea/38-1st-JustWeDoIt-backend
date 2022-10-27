@@ -62,10 +62,26 @@ const orderItem = async ( stockId, orderId, quantity ) => {
   );
   return orderItem
 };
-
+const findOrderProducts = async (orderId) => {
+  const result =await database.query(`
+    SELECT
+      p.name,
+      p.thumbnail_image_url AS image,
+      p.price,
+      p.id AS productId,
+      s.id
+    FROM order_items oi
+    JOIN stock s ON s.id = oi.stock_id
+    JOIN products p ON p.id = s.product_id
+    WHERE oi.order_id = 18
+  `, [orderId])
+  console.log(result)
+  return result;
+}
 module.exports = {
   orderInfo,
   getCarts,
   orderAdd,
-  orderItem  
+  orderItem,
+  findOrderProducts
 };

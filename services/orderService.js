@@ -17,10 +17,9 @@ const getCarts = async (userId) => {
 };
 
 const orderAdd = async(userId) => {
-
+ // const addedProducts = [];
   // console.log(getCarts);
   const orderStatusId = 1;
-  
   const date = new Date();
   const components = [
     date.getFullYear(),
@@ -38,12 +37,16 @@ const orderAdd = async(userId) => {
   const order = await orderDao.orderAdd( orderNumber, userId, orderStatusId);
   
   const getCarts = await orderDao.getCarts(userId); 
-  
+
 for(let Item=0; Item < getCarts.length; Item++){
-  await orderDao.orderItem (getCarts[Item].stockId, order.insertId, getCarts[Item].quantity);
+  const orderItem = await orderDao.orderItem (getCarts[Item].stockId, order.insertId, getCarts[Item].quantity);
+
+  // const orderItemInfo = await orderDao.findOrderProducts(orderItem.insertId);
+  // // console.log(orderItemInfo)
+  // addedProducts[Item] = orderItemInfo[0];
 }
 
-
+// return addedProducts;
 };
 
 module.exports = {

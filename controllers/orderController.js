@@ -29,10 +29,11 @@ const orderAdd = catchAsync(async (req, res) => {
   const { userId } = req.body; 
   //const  userId  = req.body;
  
-  const orderAdd = await orderService.orderAdd( userId); 
+  const data = await orderService.orderAdd(userId); 
+  const orderInfo = await orderService.orderInfo(userId); 
 
   res.status(201).json({
-    userId: userId
+    data : orderInfo
   });
 });
 
