@@ -16,7 +16,10 @@ const loginRequired = async (req, res, next) => {
   }
 
   // 2) Verification token
+  console.log("-------------------------", accessToken);
   const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRET);
+
+  console.log("-------------", decoded);
 
   // 3) Check if user still exists
   const user = await getUserById(decoded.userId);

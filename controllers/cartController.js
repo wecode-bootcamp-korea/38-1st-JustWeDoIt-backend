@@ -4,6 +4,8 @@ const { catchAsync } = require('../utils/error');
 const createCartItem = async (req, res) => {
   const userId = req.user;
   const { productId, size } = req.body;
+  console.log(req.body);
+  console.log(userId, productId, size);
 
   if (!productId || !size) {
     const err = new Error('KEY_ERROR');
