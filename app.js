@@ -16,8 +16,8 @@ app.use(globalErrorHandler);
 
 // health check
 app.get("/ping", (req, res) => {
-  res.json({ message : "pong" });
-});
+  res.json({ message : "pong" })
+})
 
 const server = http.createServer(app)
 const PORT = process.env.PORT;
