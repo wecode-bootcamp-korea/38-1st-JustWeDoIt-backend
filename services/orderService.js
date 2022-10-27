@@ -1,6 +1,38 @@
 const { orderDao } = require('../models/orderDao');
 
-const orderAdd = async (userId, orderId, orderNumber, orderStatusId) => { // 컨트롤에 넣어준 값을 그대로
+const orderInfo = async (userId) => { 
+  return await orderDao.orderInfo(userId); 
+
+
+const getCarts = async (userId) => { 
+  if (!user_id || !cart_id) {
+    const error = new Error('KEY_ERROR');
+    error.statusCode = 400;
+
+    throw error;
+  }
+
+  return await orderDao.getCarts(userId); 
+};
+
+const orderAdd = async (userId) => {
+  const date = new Date();
+  const components = [
+    date.getFullYear(),
+    date.getMonth() + 1,
+    date.getDate(),
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+    date.getMilliseconds()
+];
+  const orderId = components.join(“”);
+  }
+
+  return await orderDao.orderAdd(userId);
+};
+
+const orderInfo = async (userId) => { 
   if (!user_id || !order_id) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
@@ -8,27 +40,23 @@ const orderAdd = async (userId, orderId, orderNumber, orderStatusId) => { // 컨
     throw error;
   }
 
-  return await orderDao.orderAdd(userId, orderId, orderNumber, orderStatusId); //다오에 들어갈 객체
+  return await orderDao.orderInfo(userId); 
 };
 
-const orderItems = async (userId, orderId) => { // 컨트롤에 넣어준 값을 그대로
-  /*if (!userId || !orderId) {
+const orderItem = async (userId) => { 
+  if (!user_id || !order_id) {
     const error = new Error('KEY_ERROR');
     error.statusCode = 400;
 
     throw error;
-  }*/
+  }
 
-  return await orderDao.orderItems(userId, orderId); //다오에 들어갈 객체
+  return await orderDao.orderItem(userId); 
 };
-// 결제 전 이면 수량이 빠지면 안되는 로직
-// 재고의 수량이 없으면 결제가 안되는 로직
-// 
-
-
 
 module.exports = {
+  orderInfo,
+  getCarts,
   orderAdd,
-  orderItems
-  
+  orderItem
 };
