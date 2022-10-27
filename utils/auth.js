@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { promisify } = require('util');
-//const { getUserById } = require('../services/userService');
+const { getUserById } = require('../services/userService');
 
 const loginRequired = async (req, res, next) => { 
 
