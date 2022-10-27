@@ -10,6 +10,4 @@ router.get('', loginRequired, getCartItem);
 router.patch('', loginRequired, updateCartItem);
 router.delete('/:stockId', loginRequired, deleteCartItem);
 
-module.exports = {
-  router
-}
+module.exports = router

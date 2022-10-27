@@ -2,7 +2,7 @@
 CREATE TABLE shipments(
     id INT NOT NULL AUTO_INCREMENT,
     order_id INT NOT NULL,
-    ddressee_name VARCHAR(100) NOT NULL,
+    addressee_name VARCHAR(100) NOT NULL,
     addressee_address VARCHAR(500) NOT NULL,
     addressee_phone_number VARCHAR(50) NOT NULL,
     company VARCHAR(200) NULL,
