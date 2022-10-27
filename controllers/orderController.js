@@ -3,7 +3,7 @@ const { catchAsync } = require('../utils/error');
 
 const orderInfo = catchAsync(async (req, res) => { 
   
-  const userId = req.body.userId;
+  const { userId } = req.body;
   
   const orderInfo = await orderService.orderInfo(userId); 
 
@@ -13,23 +13,11 @@ const orderInfo = catchAsync(async (req, res) => {
   });
 });
 
-const getCarts = catchAsync(async (req, res) => { 
-  
-  const userId = req.body.userId;
- 
-  const getCarts = await orderService.getCarts(userId); 
-
-  res.status(201).json({
-    data : getCarts 
-  });
-});
-
 const orderAdd = catchAsync(async (req, res) => { 
   
   const { userId } = req.body; 
-  //const  userId  = req.body;
  
-  const data = await orderService.orderAdd(userId); 
+  await orderService.orderAdd(userId); 
   const orderInfo = await orderService.orderInfo(userId); 
 
   res.status(201).json({
@@ -40,6 +28,5 @@ const orderAdd = catchAsync(async (req, res) => {
 
 module.exports = {
   orderInfo,
-  getCarts,
   orderAdd
 };
