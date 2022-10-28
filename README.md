@@ -20,4 +20,4 @@
 - [박은송](https://github.com/Eunsong-Park)
 
 
-[Front-end Repository][https://github.com/wecode-bootcamp-korea/38-1st-JustWeDoIt-frontend]
+[Front-end Repository](https://github.com/wecode-bootcamp-korea/38-1st-JustWeDoIt-frontend)
