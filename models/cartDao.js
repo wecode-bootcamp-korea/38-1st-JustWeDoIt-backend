@@ -1,7 +1,6 @@
 const { database } = require('./dataSource');
 
-const createCartItem = async (userId, stockId) => {
-
+const createCart = async (userId, stockId) => {
   const [ stockList ] = await database.query(`
     SELECT EXISTS (
       SELECT *
@@ -27,35 +26,6 @@ const createCartItem = async (userId, stockId) => {
   }
 }
 
-const stockIdToSize = async (stockId) => {
-  return await database.query(`
-    SELECT size
-    FROM stock
-    WHERE id = ?;`, [ stockId ]
-  )
-}
-
-const sizeToStockId = async (productId, size) => {
-  return await database.query(`
-    SELECT id
-    FROM stock
-    WHERE product_id = ? AND size = ?;`, [ productId, size ]
-  )
-}
-
-const sizeStock = async (productId) => {
-  const sizeStock = await database.query(`
-    SELECT
-      size,
-      stock
-    FROM
-      stock
-    WHERE product_id = ?;`, [ productId ]
-  )
-
-  return sizeStock;
-}
-
 const getCartByCartId = async (cartId) => {
   return await database.query(`
     SELECT
@@ -70,8 +40,8 @@ const getCartByCartId = async (cartId) => {
   )
 }
 
-const getCartByUserId = async (userId) => {
-  const cart = await database.query(`
+const getCartsByUserId = async (userId) => {
+  return await database.query(`
     SELECT
       c.id AS cartId,
       c.user_id AS userId, 
@@ -85,7 +55,18 @@ const getCartByUserId = async (userId) => {
       categories.name AS category, 
       special.name AS special, 
       gender.gender, 
-      p.thumbnail_image_url AS thumbnailImage 
+      p.thumbnail_image_url AS thumbnailImage,
+      (
+        SELECT JSON_ARRAYAGG(JSON_OBJECT(
+          "stockId", stock.id,
+          "size", stock.size,
+          "stock", stock.stock
+        ))
+        FROM stock
+        JOIN products ON stock.product_id = products.id
+        WHERE products.id = p.id
+        GROUP BY products.id
+      ) AS stockInfo
     FROM carts c 
     JOIN stock s ON c.stock_id = s.id 
     JOIN products p ON s.product_id = p.id 
@@ -94,11 +75,10 @@ const getCartByUserId = async (userId) => {
     JOIN gender ON p.gender_id = gender.id
     WHERE c.user_id = ?;`, [ userId ]
   );
-
-  return cart;
 }
 
-const updateCartItem = async (userId, cartId, stockId, buyingQuantity) => {
+const updateCart = async (userId, cartId, stockId, buyingQuantity) => {
+
   const updatedRows = (await database.query(`
     UPDATE carts
     SET
@@ -106,33 +86,23 @@ const updateCartItem = async (userId, cartId, stockId, buyingQuantity) => {
       quantity = ?
     WHERE id = ? AND user_id = ?;`, [ stockId, buyingQuantity, cartId, userId ]    
   )).affectedRows
-  // 변수 선언 후 실행하는 코드는 없어도 되는지?
 
   if (updatedRows !== 1) throw new Error('UNEXPECTED_NUMBER_OF_RECORDS_UPDATED')
 
-  const result = await database.query(`
-    SELECT *
-    FROM carts
-    WHERE id = ? AND user_id = ?;`, [ cartId, userId ]
-    );
-
-  return result;
+  return getCartsByUserId(userId);
 }
 
-const deleteCartItem = async (userId, stockId) => {
+const deleteCart = async (userId, cartId) => {
   return await database.query(`
       DELETE FROM carts
-      WHERE user_id = ? AND stock_id = ?;`, [ userId, stockId ]
+      WHERE user_id = ? AND id = ?;`, [ userId, cartId ]
   )
 }
 
 module.exports = {
-  createCartItem,
-  stockIdToSize,
-  sizeToStockId,
-  sizeStock,
+  createCart,
   getCartByCartId,
-  getCartByUserId,
-  updateCartItem,
-  deleteCartItem,
+  getCartsByUserId,
+  updateCart,
+  deleteCart,
 }

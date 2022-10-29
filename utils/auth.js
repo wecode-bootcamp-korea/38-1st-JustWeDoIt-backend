@@ -6,7 +6,6 @@ const loginRequired = async (req, res, next) => {
 
   // 1) Getting token and check if it is there
   const accessToken = req.headers.authorization;
-  console.log(accessToken);
 
   if (!accessToken) {
     const error = new Error('NEED_ACCESS_TOKEN');
@@ -16,10 +15,7 @@ const loginRequired = async (req, res, next) => {
   }
 
   // 2) Verification token
-  console.log("-------------------------", accessToken);
   const decoded = await promisify(jwt.verify)(accessToken, process.env.JWT_SECRET);
-
-  console.log("-------------", decoded);
 
   // 3) Check if user still exists
   const user = await getUserById(decoded.userId);
