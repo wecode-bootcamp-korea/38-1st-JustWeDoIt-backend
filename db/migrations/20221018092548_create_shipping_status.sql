@@ -1,8 +1,9 @@
 -- migrate:up
 CREATE TABLE shipping_status(
     id INT NOT NULL AUTO_INCREMENT,
-    status VARCHAR(50) NOT NULL,
+    status VARCHAR(100) NOT NULL,
     PRIMARY KEY(id)
+ 
 );
 
 -- migrate:down
