@@ -1,53 +1,8 @@
 const cartService = require('../services/cartService');
-const { catchAsync } = require('../utils/error');
 
-const createCartItem = async (req, res) => {
+const createCart = async (req, res) => {
   const userId = req.user;
-  const { productId, size } = req.body;
-
-  if (!productId || !size) {
-    const err = new Error('KEY_ERROR');
-    err.statusCode = 400;
-    throw err;
-  }
-
-  await cartService.createCartItem(userId, productId, size);
-  const data = await cartService.getCartByUserId(userId);
-
-  return res.status(201).json({ 
-    message : 'CART_ITEM_CREATED',
-    data : data 
-  });
-}
-
-const getCartItem = async (req, res) => {
-  const userId = req.user;
-
-  const data = await cartService.getCartByUserId(userId);
-
-  return res.status(200).json({ 
-    message : 'SUCCESS',
-    data : data
-  });
-}
-
-const updateCartItem = async (req, res) => {
-  const userId = req.user;
-  const { cartId, productId, newSize, buyingQuantity } = req.body;
-
-  await cartService.updateCartItem(userId, cartId, productId, newSize, buyingQuantity);
-
-  const data = await cartService.getCartByUserId(userId);
-
-  return res.status(201).json({
-    message : 'SUCCESS',
-    data : data 
-  });
-}
-
-const deleteCartItem = async (req, res) => {
-  const userId = req.user;
-  const stockId = req.params.stockId;
+  const { stockId } = req.body;
 
   if (!stockId) {
     const err = new Error('KEY_ERROR');
@@ -55,14 +10,62 @@ const deleteCartItem = async (req, res) => {
     throw err;
   }
 
-  await cartService.deleteCartItem(userId, stockId);
+  await cartService.createCart(userId, stockId);
+  const carts = await cartService.getCartsByUserId(userId);
 
-  return res.status(204).json({});
+  return res.status(201).json({ 
+    message : 'CART_ITEM_CREATED',
+    data : carts 
+  });
+}
+
+const getCarts = async (req, res) => {
+  const userId = req.user;
+
+  const data = await cartService.getCartsByUserId(userId);
+
+  return res.status(200).json({ 
+    message : 'SUCCESS',
+    data : data
+  });
+}
+
+const updateCart = async (req, res) => {
+  const userId = req.user;
+  const {
+    params: { cartId },
+    body: {
+      stockId,
+      buyingQuantity
+    }
+  } = req;
+
+  const carts = await cartService.updateCart(userId, cartId, stockId, buyingQuantity);
+
+  return res.status(201).json({
+    message : 'SUCCESS',
+    data : carts 
+  });
+}
+
+const deleteCart = async (req, res) => {
+  const userId = req.user;
+  const { cartId } = req.params;
+
+  if (!cartId) {
+    const err = new Error('KEY_ERROR');
+    err.statusCode = 400;
+    throw err;
+  }
+
+  await cartService.deleteCart(userId, cartId);
+
+  return res.status(204).send();
 }
 
 module.exports = {
-  createCartItem,
-  getCartItem,
-  updateCartItem,
-  deleteCartItem
+  createCart,
+  getCarts,
+  updateCart,
+  deleteCart
 }

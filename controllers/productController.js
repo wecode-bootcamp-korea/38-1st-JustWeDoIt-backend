@@ -18,9 +18,7 @@ const requestAllMain = catchAsync(async ( req, res )=> {
 
 const categoryFilter = catchAsync( async ( req, res ) => {
     const { offset, limit } = req.query;
-    console.log(offset, limit)
     const { id } = req.params;
-    console.log(id)
     const categoryFilter = await productService.categoryFilter( id, offset, limit );
     
     res.status(201).json(categoryFilter);

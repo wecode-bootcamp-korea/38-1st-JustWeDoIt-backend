@@ -6,7 +6,6 @@ const loginRequired = async (req, res, next) => {
 
   // 1) Getting token and check if it is there
   const accessToken = req.headers.authorization;
-  console.log(accessToken);
 
   if (!accessToken) {
     const error = new Error('NEED_ACCESS_TOKEN');
